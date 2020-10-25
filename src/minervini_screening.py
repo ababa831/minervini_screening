@@ -27,7 +27,7 @@ warnings.filterwarnings('ignore')
 TOKEN = os.environ.get('IEX_TOKEN')
 
 
-def get_symbols(country):
+def get_tickers(country):
     """
     Download symbol list
     """
@@ -275,7 +275,7 @@ def add_next_earnings_date(df_excellent):
 def postfile(converted_data, title, country, channel='#stock_batch'):
     client = slack.WebClient(token=os.environ['SLACK_TOKEN'])
     try:
-        text = f'minervini_screening_{country}_{title}'
+        text = f'minervini_screening_{title}'
         response = client.chat_postMessage(
             channel=channel,
             text=text
@@ -316,7 +316,7 @@ def load(path):
 @click.command()
 @click.option('--country', '-c', default='us')
 def main(country):
-    tickers, ja_stockcode = get_symbols(country)
+    tickers, ja_stockcode = get_tickers(country)
     # ja_stockcodeがNoneでない場合はcountryがjaでなければならない
     if not isinstance(ja_stockcode, type(None)):
         if country != 'ja':
