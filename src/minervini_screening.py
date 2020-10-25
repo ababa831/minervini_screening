@@ -329,6 +329,7 @@ def main(country):
         get_growth_stocks(tickers_rs_growth, charts=charts, country=country)
     df_excellent = \
         filter_excellent_tickers(rank_diff, ja_stockcode, country=country, ja_stockcode=ja_stockcode)
+    df_excellent = add_next_earnings_date(df_excellent)
     
     dstdir = Path(__file__).parent
     title = f'{datetime.now().strftime("%Y%m%d")}_{country}'
