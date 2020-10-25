@@ -19,5 +19,5 @@ fi
 echo $country
 
 if [ "$country" != "None" ]; then
-    docker run --rm -it --env IEX_TOKEN=$IEX_TOKEN --env SLACK_TOKEN=$SLACK_TOKEN minervini_screening:latest --country $country
+    sudo docker run --rm -it --env IEX_TOKEN=$IEX_TOKEN --env SLACK_TOKEN=$SLACK_TOKEN minervini_screening:latest --country $country
 fi
