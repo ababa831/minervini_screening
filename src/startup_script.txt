@@ -3,6 +3,7 @@ sudo bash install-logging-agent.sh
 sudo timedatectl set-timezone Asia/Tokyo
 sudo apt update -y
 sudo apt install docker.io -y
+rm -rf minervini_screening/
 git clone https://github.com/ababa831/minervini_screening.git
 cd minervini_screening/src
 sudo docker build . -t minervini_screening
