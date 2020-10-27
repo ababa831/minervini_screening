@@ -88,9 +88,10 @@ def get_rs_rank(ibd_rs_dict):
     """
     Get relative strength ranking DataFrame
     """
-    idbrs_dict_f = {k: v for k, v in ibd_rs_dict.items() if v.shape[0] != 0 and not np.isnan(v).all()}
+    # 欠損＆インデックス重複対策
+    idbrs_dict_f = {k: v.dropna() for k, v in ibd_rs_dict.items() if v.shape[0] != 0 and not np.isnan(v).all()}
 
-    df_all_rs = pd.DataFrame(idbrs_dict_f)
+    df_all_rs = pd.DataFrame(idbrs_dict_f, index=idbrs_dict_f[arg_max].index)
 
     for idx, row in tqdm(df_all_rs.iterrows()):
         demo_rank = row.dropna().sort_values(ascending=False)
