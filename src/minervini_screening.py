@@ -89,7 +89,7 @@ def get_rs_rank(ibd_rs_dict):
     Get relative strength ranking DataFrame
     """
     # 欠損＆インデックス重複対策
-    idbrs_dict_f = {k: v.dropna() for k, v in ibd_rs_dict_ja.items() if v.shape[0] != 0 and not np.isnan(v).all()}
+    idbrs_dict_f = {k: v.dropna() for k, v in ibd_rs_dict.items() if v.shape[0] != 0 and not np.isnan(v).all()}
 
     max_len = 0
     arg_max = None
