@@ -97,24 +97,24 @@ def get_rs_rank(ibd_rs_dict):
     Get relative strength ranking DataFrame
     """
     # 欠損＆インデックス重複対策
-    idbrs_dict_f = {k: v.dropna() for k, v in ibd_rs_dict.items() if v.shape[0] != 0 and not np.isnan(v).all()}
+    # ibdrs_dict_f = {k: v.dropna() for k, v in ibd_rs_dict.items() if v.shape[0] != 0 and not np.isnan(v).all()}
 
-    idbrs_dict_f = {}
+    ibdrs_dict_f = {}
     for k, v in ibd_rs_dict.items():
         if v.shape[0] == 0 or np.isnan(v).all():
             continue
         if v.index[-1] == v.index[-2]:
-            idbrs_dict_f[k] = v.iloc[:-1].dropna()
+            ibdrs_dict_f[k] = v.iloc[:-1].dropna()
         else:
-            idbrs_dict_f[k] = v.dropna()
+            ibdrs_dict_f[k] = v.dropna()
 
     max_len = 0
     arg_max = None
-    for k, v in idbrs_dict_f.items():
+    for k, v in ibdrs_dict_f.items():
         if v.shape[0] > max_len:
             arg_max = k
 
-    df_all_rs = pd.DataFrame(idbrs_dict_f, index=idbrs_dict_f[arg_max].index)
+    df_all_rs = pd.DataFrame(ibdrs_dict_f, index=ibdrs_dict_f[arg_max].index)
 
     for idx, row in tqdm(df_all_rs.iterrows()):
         demo_rank = row.dropna().sort_values(ascending=False)
