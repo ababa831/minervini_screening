@@ -8,7 +8,6 @@ import warnings
 from datetime import datetime, timedelta
 import dateutil.parser
 
-from iexfinance.refdata import get_symbols
 import yfinance as yf
 from yahoo_earnings_calendar import YahooEarningsCalendar
 import requests
@@ -24,7 +23,6 @@ import click
 
 
 warnings.filterwarnings('ignore')
-TOKEN = os.environ.get('IEX_TOKEN')
 
 
 def get_tickers(country):
@@ -34,8 +32,18 @@ def get_tickers(country):
     tickers = None
     df_stockcode = None
     if country == 'us':
-        df_ticker = get_symbols(output_format='pandas', token=TOKEN)
-        tickers = df_ticker['symbol']
+        ex_nas = pd.read_csv('ftp://ftp.nasdaqtrader.com/symboldirectory/otherlisted.txt', sep='|')
+        nas = pd.read_csv('ftp://ftp.nasdaqtrader.com/SymbolDirectory/nasdaqlisted.txt', sep='|')
+
+        filter_ignore = '[!"#$%&\'\\\\()*+,-./:;<=>?@[\\]^_`{|}~「」〔〕“”〈〉『』【】＆＊・（）＄＃＠。、？！｀＋￥％]'
+        filter_contains = '[A-Z]{,4}'
+        tickers = []
+        for e in [ex_nas, nas]:
+            e.rename(columns={'ACT Symbol': 'Symbol'}, inplace=True)
+            c1 = ~e['Symbol'].str.contains(filter_ignore)
+            c2 = e['Symbol'].str.match(filter_contains)
+            pd_symbols = e[c1&c2]['Symbol']
+            tickers += pd_symbols.tolist()[:-1]
     elif country == 'ja':
         url = 'https://www.jpx.co.jp/markets/statistics-equities/misc/tvdivq0000001vg2-att/data_j.xls'
         res = requests.get(url)

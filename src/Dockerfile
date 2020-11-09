@@ -41,7 +41,7 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN ln -s /usr/bin/pip3 /usr/bin/pip
 
 # 必要なパッケージのインストール
-RUN pip install tqdm iexfinance python-dotenv yfinance yahoo_earnings_calendar xlrd schedule japanize-matplotlib slackclient nest_asyncio requests click
+RUN pip install tqdm python-dotenv yfinance yahoo_earnings_calendar xlrd schedule japanize-matplotlib slackclient nest_asyncio requests click
 
 # 定義したエントリポイントをホストOSからコピー
 COPY entrypoint.sh /home
