@@ -1,5 +1,4 @@
 # 要求：Secret Managerに値を設定
-IEX_TOKEN=$(gcloud secrets versions access 1 --secret IEX_TOKEN)
 SLACK_TOKEN=$(gcloud secrets versions access 1 --secret SLACK_TOKEN)
 
 ja_searchtime_start=$(date "+%Y-%m-%d 16:00:00")
@@ -19,6 +18,6 @@ fi
 echo $country
 
 if [ "$country" != "None" ]; then
-    sudo docker run --rm --name minervini_screening --env IEX_TOKEN=$IEX_TOKEN --env SLACK_TOKEN=$SLACK_TOKEN minervini_screening:latest --country $country
+    sudo docker run --rm --name minervini_screening --env SLACK_TOKEN=$SLACK_TOKEN minervini_screening:latest --country $country
     #sudo docker logs minervini_screening:latest
 fi
