@@ -52,7 +52,7 @@ def get_tickers(country):
             df_stockcode = pd.io.excel.read_excel(fh)
         tickers = df_stockcode['コード']
     else:
-        raise NotImplementedError('Other contry are not yet supported') 
+        raise NotImplementedError('Other contries are not yet supported') 
 
     return tickers, df_stockcode
 
