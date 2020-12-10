@@ -18,6 +18,6 @@ fi
 echo $country
 
 if [ "$country" != "None" ]; then
-    sudo docker run --rm --name minervini_screening --env SLACK_TOKEN=$SLACK_TOKEN minervini_screening:latest --country $country
-    #sudo docker logs minervini_screening:latest
+    sudo docker run --rm --name minervini_screening --env SLACK_TOKEN=$SLACK_TOKEN -v $PWD:/home minervini_screening:latest --country $country
+    # sudo docker logs minervini_screening:latest
 fi
