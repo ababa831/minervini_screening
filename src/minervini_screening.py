@@ -63,9 +63,9 @@ def get_ibd_rs(tickers, range='max', country='us'):
     ibd_rs_dict = {}
     charts = {}
     for t in tqdm(tickers):
-        if len(t) > 4:
+        if len(str(t)) > 4:
             continue
-        time.sleep(1)
+        # time.sleep(0.5)
         df_chart = None
         try:
             if country == 'ja':
@@ -181,7 +181,7 @@ def get_growth_stocks(tickers, range='max', charts=None, country='us'):
     growth_stocks = {}
     rank_of_diff_highest = {}
     for t in tqdm(tickers):
-        time.sleep(1)
+        # time.sleep(0.5)
         df_chart = None
         try:
             if charts:
