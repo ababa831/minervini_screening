@@ -8,7 +8,6 @@ import warnings
 from datetime import datetime, timedelta
 import dateutil.parser
 
-# import yfinance as yf
 from yahoo_earnings_calendar import YahooEarningsCalendar
 import requests
 from requests.exceptions import ConnectionError
@@ -69,11 +68,8 @@ def get_ibd_rs(tickers, range='max', country='us'):
         df_chart = None
         try:
             if country == 'ja':
-                # jp = yf.Ticker(f'{t}.T')
-                # df_chart = jp.history(period=range, progress=False)
                 df_chart = web.DataReader(f'{t}.T', 'yahoo', '1980/1/1')
             elif country == 'us':
-                # df_chart = yf.download(t, period=range, progress=False)
                 df_chart = web.DataReader(t, 'yahoo', '1980/1/1')
         except Exception as e:
             print(f'{e}はスキップする: ', t)
@@ -98,7 +94,6 @@ def get_ibd_rs(tickers, range='max', country='us'):
         ibd_rs_dict[t] = df_chart['ibdRS']
         charts[t] = df_chart
         yield t, df_chart['ibdRS'], df_chart
-    #return ibd_rs_dict, charts
 
 
 def add_macd_signal(charts, sspan=12, lspan=26, smooth=9):
@@ -187,11 +182,8 @@ def get_growth_stocks(tickers, range='max', charts=None, country='us'):
             if charts:
                 df_chart = charts[t]
             elif country == 'ja':  # データがない場合
-                #jp = yf.Ticker(f'{t}.T')
-                #df_chart = jp.history(period=range)
                 df_chart = web.DataReader(f'{t}.T', 'yahoo', '1980/1/1')
             elif country == 'us':  # データがない場合
-                #df_chart = yf.download(t, period=range)
                 df_chart = web.DataReader(t, 'yahoo', '1980/1/1')
         except Exception as e:
             print(f'{e}はスキップする: ', t)
@@ -363,7 +355,9 @@ def filter_excellent_tickers(rank_diff, df_stockcode, charts, country='us', ja_s
             gcross_flags.append(False)
     df_excellent['golden_cross_detected'] = gcross_flags
 
-    df_excellent.sort_values(by='volatility_change_in5days', inplace=True)
+    df_excellent.sort_values(by=['golden_cross_detected', 
+                                 'volatility_change_in5days'], inplace=True)
+    # df_excellent.sort_values(by='volatility_change_in5days', inplace=True)
     df_excellent = df_excellent[df_excellent['price_diff_from_highest'] >= -0.25]
     
     return df_excellent
