@@ -38,12 +38,14 @@ def get_tickers(country):
 
         filter_ignore = '[!"#$%&\'\\\\()*+,-./:;<=>?@[\\]^_`{|}~「」〔〕“”〈〉『』【】＆＊・（）＄＃＠。、？！｀＋￥％]'
         filter_contains = '[A-Z]{,4}'
+        filter_sec_contains = 'Common Stock|ETF|ETN'
         tickers = []
         for e in [ex_nas, nas]:
             e.rename(columns={'ACT Symbol': 'Symbol'}, inplace=True)
             c1 = ~e['Symbol'].str.contains(filter_ignore)
             c2 = e['Symbol'].str.match(filter_contains)
-            pd_symbols = e[c1&c2]['Symbol']
+            c3 = e['Security Name'].str.contains(filter_sec_contains)
+            pd_symbols = e[c1&c2&c3]['Symbol']
             tickers += pd_symbols.tolist()[:-1]
     elif country == 'ja':
         url = 'https://www.jpx.co.jp/markets/statistics-equities/misc/tvdivq0000001vg2-att/data_j.xls'
