@@ -226,9 +226,9 @@ def get_growth_stocks(tickers, range='max', charts=None, country='us'):
             continue
 
         # filtering: exclude penny (< $10)
-        c8 = latest < 10
-        if c8:
-            continue
+        # c8 = latest < 10
+        # if c8:
+        #     continue
 
         # Get the highest price -> Ranking: diff of latest and highest
         all_latest = df_chart['Close'].max()
