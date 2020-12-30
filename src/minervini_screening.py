@@ -164,13 +164,19 @@ def get_recent_strong_tickers(df_rs_rank, rs_thres=90):
     tickers_rs_growth_last60 = []
     for col in tqdm(tickers_rs_elite):
         df_tmp = df_rs_rank[[col]].rolling(5).mean()
-        c30 = df_tmp[col].iloc[-30]
+        # c30 = df_tmp[col].iloc[-30]
         c60 = df_tmp[col].iloc[-60]
         c = df_tmp[col].iloc[-1]
         if np.isnan(c60):
             continue
+        """
+        # NOTE:
+        # Exclude the below filter 
+        # because we want to detect initial state of growing stocks
         if c30 <= c and c60 <= c30:
             tickers_rs_growth_last60.append(col)
+        """
+        tickers_rs_growth_last60.append(col)
     return tickers_rs_growth_last60
 
 
