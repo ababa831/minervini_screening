@@ -31,6 +31,7 @@ USER_AGENT = {
     }
 
 
+
 def get_tickers(country):
     """
     Download symbol list

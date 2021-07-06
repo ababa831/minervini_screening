@@ -1,0 +1,12 @@
+curl -O https://dl.google.com/cloudagents/install-logging-agent.sh
+sudo bash install-logging-agent.sh
+sudo timedatectl set-timezone Asia/Tokyo
+sudo apt update -y
+sudo apt install docker.io -y
+rm -rf minervini_screening/
+git clone https://github.com/ababa831/minervini_screening.git
+cd minervini_screening/src
+chmod +x ./entrypoint.sh
+sudo docker build . -t minervini_screening
+chmod +x ./docker_run.sh
+./docker_run.sh
