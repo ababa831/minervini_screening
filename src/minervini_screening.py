@@ -24,6 +24,12 @@ import pandas_datareader.data as web
 from pandas_datareader._utils import RemoteDataError
 
 warnings.filterwarnings('ignore')
+# NOTE: pandas_datareaderのデータ取得不能（#issue867）時の暫定的対応
+USER_AGENT = {
+    'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
+                   ' Chrome/91.0.4472.124 Safari/537.36')
+    }
+
 
 
 def get_tickers(country):
@@ -68,11 +74,14 @@ def get_ibd_rs(tickers, range='max', country='us'):
             continue
         # time.sleep(0.5)
         df_chart = None
+        # NOTE: pandas_datareaderのデータ取得不能（#issue867）時の暫定的対応
+        sesh = requests.Session()
+        sesh.headers.update(USER_AGENT)
         try:
             if country == 'ja':
-                df_chart = web.DataReader(f'{t}.T', 'yahoo', '1980/1/1')
+                df_chart = web.DataReader(f'{t}.T', 'yahoo', '1980/1/1', session=sesh)
             elif country == 'us':
-                df_chart = web.DataReader(t, 'yahoo', '1980/1/1')
+                df_chart = web.DataReader(t, 'yahoo', '1980/1/1', session=sesh)
         except Exception as e:
             print(f'{e}はスキップする: ', t)
 
@@ -186,13 +195,16 @@ def get_growth_stocks(tickers, range='max', charts=None, country='us'):
     for t in tqdm(tickers):
         # time.sleep(0.5)
         df_chart = None
+        # NOTE: pandas_datareaderのデータ取得不能（#issue867）時の暫定的対応
+        sesh = requests.Session()
+        sesh.headers.update(USER_AGENT)
         try:
             if charts:
                 df_chart = charts[t]
             elif country == 'ja':  # データがない場合
-                df_chart = web.DataReader(f'{t}.T', 'yahoo', '1980/1/1')
+                df_chart = web.DataReader(f'{t}.T', 'yahoo', '1980/1/1', session=sesh)
             elif country == 'us':  # データがない場合
-                df_chart = web.DataReader(t, 'yahoo', '1980/1/1')
+                df_chart = web.DataReader(t, 'yahoo', '1980/1/1', session=sesh)
         except Exception as e:
             print(f'{e}はスキップする: ', t)
 
