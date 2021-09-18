@@ -22,6 +22,8 @@ import nest_asyncio
 import click
 import pandas_datareader.data as web
 from pandas_datareader._utils import RemoteDataError
+import joblib
+
 
 warnings.filterwarnings('ignore')
 # NOTE: pandas_datareaderのデータ取得不能（#issue867）時の暫定的対応
@@ -29,7 +31,6 @@ USER_AGENT = {
     'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)'
                    ' Chrome/91.0.4472.124 Safari/537.36')
     }
-
 
 
 def get_tickers(country):
@@ -473,14 +474,21 @@ def load(path):
 
 @click.command()
 @click.option('--country', '-c', default='us')
-def main(country):
+@click.option('--filename_chart', '-f', default='chart.pkl')
+@click.option('--debug', '-d', is_flag=True)
+def main(country, filename_chart, debug):
     tickers, ja_stockcode = get_tickers(country)
+    if debug:
+        tickers = tickers[:10]
     # ja_stockcodeがNoneでない場合はcountryがjaでなければならない
     if not isinstance(ja_stockcode, type(None)):
         if country != 'ja':
             raise ValueError('日本株選定しているはずなのにja_stockcodeがNoneの場合はおかしい')
     
     ibd_rs_dict, charts = get_idb_rs_yield(tickers, country=country)
+
+    joblib.dump(charts, filename_chart, compress=3)
+
     charts = add_macd_signal(charts)
     df_rs_rank = get_rs_rank(ibd_rs_dict)
     tickers_rs_growth = get_recent_strong_tickers(df_rs_rank, rs_thres=90)
