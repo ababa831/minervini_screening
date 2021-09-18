@@ -130,3 +130,6 @@ dmypy.json
 
 # Additional directories
 tmp/
+
+# Additional files
+*.pkl

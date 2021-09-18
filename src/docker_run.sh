@@ -16,8 +16,12 @@ elif [[ "$us_searchtime_start" < "$datenow" ]] && [[ "$us_searchtime_end" > "$da
 fi
 
 echo $country
-
+filename_chart="chart.pkl"
+bucket="stock-dwh-lake"
+directory="stock-batch"
+destination="gs://$bucket/$directory/"
 if [ "$country" != "None" ]; then
-    sudo docker run --rm --name minervini_screening --env SLACK_TOKEN=$SLACK_TOKEN -v $PWD:/home minervini_screening:latest --country $country
+    sudo docker run --rm --name minervini_screening --env SLACK_TOKEN=$SLACK_TOKEN -v $PWD:/home minervini_screening:latest --country $country --filename_chart $filename_chart 
     # sudo docker logs minervini_screening:latest
+    gsutil cp $(cd $(dirname ${BASH_SOURCE:-$0}); pwd)/$filename_chart  $destination
 fi

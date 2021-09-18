@@ -42,7 +42,7 @@ RUN ln -s /usr/bin/pip3 /usr/bin/pip
 
 # 必要なパッケージのインストール
 # yfinance 
-RUN pip install tqdm python-dotenv yahoo_earnings_calendar xlrd schedule japanize-matplotlib slackclient nest_asyncio requests click pandas_datareader
+RUN pip install tqdm python-dotenv yahoo_earnings_calendar xlrd schedule japanize-matplotlib slackclient nest_asyncio requests click pandas_datareader joblib
 
 # 定義したエントリポイントをホストOSからコピー
 COPY entrypoint.sh /home
