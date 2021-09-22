@@ -19,7 +19,7 @@ echo $country
 filename_chart="chart.pkl"
 bucket="stock-dwh-lake"
 directory="stock-batch"
-destination="gs://$bucket/$directory/"
+destination="gs://$bucket/$directory/$country/"
 if [ "$country" != "None" ]; then
     sudo docker run --rm --name minervini_screening --env SLACK_TOKEN=$SLACK_TOKEN -v $PWD:/home minervini_screening:latest --country $country --filename_chart $filename_chart 
     # sudo docker logs minervini_screening:latest
